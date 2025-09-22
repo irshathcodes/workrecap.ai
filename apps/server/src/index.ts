@@ -1,17 +1,17 @@
 import "dotenv/config";
-import { OpenAPIHandler } from "@orpc/openapi/fetch";
-import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
-import { RPCHandler } from "@orpc/server/fetch";
-import { onError } from "@orpc/server";
-import { createContext } from "./lib/context";
-import { appRouter } from "./routers/index";
-import { auth } from "./lib/auth";
-import { Hono } from "hono";
-import { cors } from "hono/cors";
-import { logger } from "hono/logger";
-import { streamText, convertToModelMessages } from "ai";
-import { google } from "@ai-sdk/google";
+import {google} from "@ai-sdk/google";
+import {OpenAPIHandler} from "@orpc/openapi/fetch";
+import {OpenAPIReferencePlugin} from "@orpc/openapi/plugins";
+import {onError} from "@orpc/server";
+import {RPCHandler} from "@orpc/server/fetch";
+import {ZodToJsonSchemaConverter} from "@orpc/zod/zod4";
+import {convertToModelMessages, streamText} from "ai";
+import {Hono} from "hono";
+import {cors} from "hono/cors";
+import {logger} from "hono/logger";
+import {auth} from "./lib/auth";
+import {createContext} from "./lib/context";
+import {appRouter} from "./routers/index";
 
 const app = new Hono();
 
@@ -50,7 +50,7 @@ export const rpcHandler = new RPCHandler(appRouter, {
 });
 
 app.use("/*", async (c, next) => {
-	const context = await createContext({ context: c });
+	const context = await createContext({context: c});
 
 	const rpcResult = await rpcHandler.handle(c.req.raw, {
 		prefix: "/rpc",
