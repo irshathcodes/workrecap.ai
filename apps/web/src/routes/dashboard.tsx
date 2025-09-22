@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
-import { orpc } from "@/utils/orpc";
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import {useQuery} from "@tanstack/react-query";
+import {createFileRoute, redirect} from "@tanstack/react-router";
+import {Button} from "@/components/ui/button";
+import {authClient} from "@/lib/auth-client";
+import {orpc} from "@/utils/orpc";
 
 export const Route = createFileRoute("/dashboard")({
 	component: RouteComponent,
@@ -14,13 +14,13 @@ export const Route = createFileRoute("/dashboard")({
 				throw: true,
 			});
 		}
-		const { data: customerState } = await authClient.customer.state();
-		return { session, customerState };
+		const {data: customerState} = await authClient.customer.state();
+		return {session, customerState};
 	},
 });
 
 function RouteComponent() {
-	const { session, customerState } = Route.useRouteContext();
+	const {session, customerState} = Route.useRouteContext();
 
 	const privateData = useQuery(orpc.privateData.queryOptions());
 
@@ -38,9 +38,7 @@ function RouteComponent() {
 					Manage Subscription
 				</Button>
 			) : (
-				<Button
-					onClick={async () => await authClient.checkout({ slug: "pro" })}
-				>
+				<Button onClick={async () => await authClient.checkout({slug: "pro"})}>
 					Upgrade to Pro
 				</Button>
 			)}

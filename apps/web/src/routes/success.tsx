@@ -1,4 +1,4 @@
-import { createFileRoute, useSearch } from "@tanstack/react-router";
+import {createFileRoute, useSearch} from "@tanstack/react-router";
 
 export const Route = createFileRoute("/success")({
 	component: SuccessPage,
@@ -8,7 +8,7 @@ export const Route = createFileRoute("/success")({
 });
 
 function SuccessPage() {
-	const { checkout_id } = useSearch({ from: "/success" });
+	const {checkout_id} = useSearch({from: "/success"});
 
 	return (
 		<div className="container mx-auto px-4 py-8">

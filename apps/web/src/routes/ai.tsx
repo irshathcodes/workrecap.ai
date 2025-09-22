@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
-import { useRef, useEffect, useState } from "react";
-import { Response } from "@/components/response";
+import {useChat} from "@ai-sdk/react";
+import {createFileRoute} from "@tanstack/react-router";
+import {DefaultChatTransport} from "ai";
+import {Send} from "lucide-react";
+import {useEffect, useRef, useState} from "react";
+import {Response} from "@/components/response";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
 
 export const Route = createFileRoute("/ai")({
 	component: RouteComponent,
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/ai")({
 
 function RouteComponent() {
 	const [input, setInput] = useState("");
-	const { messages, sendMessage } = useChat({
+	const {messages, sendMessage} = useChat({
 		transport: new DefaultChatTransport({
 			api: `${import.meta.env.VITE_SERVER_URL}/ai`,
 		}),
@@ -22,39 +22,40 @@ function RouteComponent() {
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+		messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
 	}, [messages]);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const text = input.trim();
 		if (!text) return;
-		sendMessage({ text });
+		sendMessage({text});
 		setInput("");
 	};
 
 	return (
-		<div className="grid grid-rows-[1fr_auto] overflow-hidden w-full mx-auto p-4">
-			<div className="overflow-y-auto space-y-4 pb-4">
+		<div className="mx-auto grid w-full grid-rows-[1fr_auto] overflow-hidden p-4">
+			<div className="space-y-4 overflow-y-auto pb-4">
 				{messages.length === 0 ? (
-					<div className="text-center text-muted-foreground mt-8">
+					<div className="mt-8 text-center text-muted-foreground">
 						Ask me anything to get started!
 					</div>
 				) : (
 					messages.map((message) => (
 						<div
 							key={message.id}
-							className={`p-3 rounded-lg ${
+							className={`rounded-lg p-3 ${
 								message.role === "user"
-									? "bg-primary/10 ml-8"
-									: "bg-secondary/20 mr-8"
+									? "ml-8 bg-primary/10"
+									: "mr-8 bg-secondary/20"
 							}`}
 						>
-							<p className="text-sm font-semibold mb-1">
+							<p className="mb-1 font-semibold text-sm">
 								{message.role === "user" ? "You" : "AI Assistant"}
 							</p>
 							{message.parts?.map((part, index) => {
 								if (part.type === "text") {
+									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 									return <Response key={index}>{part.text}</Response>;
 								}
 								return null;
@@ -67,7 +68,7 @@ function RouteComponent() {
 
 			<form
 				onSubmit={handleSubmit}
-				className="w-full flex items-center space-x-2 pt-2 border-t"
+				className="flex w-full items-center space-x-2 border-t pt-2"
 			>
 				<Input
 					name="prompt"

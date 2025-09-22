@@ -1,12 +1,12 @@
-import { authClient } from "@/lib/auth-client";
-import { useForm } from "@tanstack/react-form";
-import { useNavigate } from "@tanstack/react-router";
-import { toast } from "sonner";
+import {useForm} from "@tanstack/react-form";
+import {useNavigate} from "@tanstack/react-router";
+import {toast} from "sonner";
 import z from "zod";
+import {authClient} from "@/lib/auth-client";
 import Loader from "./loader";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+import {Button} from "./ui/button";
+import {Input} from "./ui/input";
+import {Label} from "./ui/label";
 
 export default function SignUpForm({
 	onSwitchToSignIn,
@@ -16,7 +16,7 @@ export default function SignUpForm({
 	const navigate = useNavigate({
 		from: "/",
 	});
-	const { isPending } = authClient.useSession();
+	const {isPending} = authClient.useSession();
 
 	const form = useForm({
 		defaultValues: {
@@ -24,7 +24,7 @@ export default function SignUpForm({
 			password: "",
 			name: "",
 		},
-		onSubmit: async ({ value }) => {
+		onSubmit: async ({value}) => {
 			await authClient.signUp.email(
 				{
 					email: value.email,
@@ -58,8 +58,8 @@ export default function SignUpForm({
 	}
 
 	return (
-		<div className="mx-auto w-full mt-10 max-w-md p-6">
-			<h1 className="mb-6 text-center text-3xl font-bold">Create Account</h1>
+		<div className="mx-auto mt-10 w-full max-w-md p-6">
+			<h1 className="mb-6 text-center font-bold text-3xl">Create Account</h1>
 
 			<form
 				onSubmit={(e) => {

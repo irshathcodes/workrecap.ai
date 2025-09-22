@@ -59,12 +59,17 @@
 				"useNumberNamespace": "error",
 				"noInferrableTypes": "error",
 				"noUselessElse": "error"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "warn",
+				"noUnknownAtRules": "warn"
 			}
 		}
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "double"
+			"quoteStyle": "double",
+			"bracketSpacing": false
 		}
 	}
 }
