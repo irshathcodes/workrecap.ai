@@ -1,5 +1,5 @@
 import "dotenv/config";
-import {google} from "@ai-sdk/google";
+import {openai} from "@ai-sdk/openai";
 import {OpenAPIHandler} from "@orpc/openapi/fetch";
 import {OpenAPIReferencePlugin} from "@orpc/openapi/plugins";
 import {onError} from "@orpc/server";
@@ -77,7 +77,7 @@ app.post("/ai", async (c) => {
 	const body = await c.req.json();
 	const uiMessages = body.messages || [];
 	const result = streamText({
-		model: google("gemini-1.5-flash"),
+		model: openai("gpt-5"),
 		messages: convertToModelMessages(uiMessages),
 	});
 

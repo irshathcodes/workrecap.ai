@@ -2,14 +2,14 @@ import {checkout, polar, portal} from "@polar-sh/better-auth";
 import {type BetterAuthOptions, betterAuth} from "better-auth";
 import {drizzleAdapter} from "better-auth/adapters/drizzle";
 import {db} from "../db";
-import * as schema from "../db/schema/auth";
+import schema from "../db/schema";
 import {polarClient} from "./payments";
 
 export const auth = betterAuth<BetterAuthOptions>({
 	database: drizzleAdapter(db, {
 		provider: "sqlite",
-
-		schema: schema,
+		usePlural: true,
+		schema,
 	}),
 	trustedOrigins: [process.env.CORS_ORIGIN || ""],
 	emailAndPassword: {
@@ -23,23 +23,23 @@ export const auth = betterAuth<BetterAuthOptions>({
 		},
 	},
 	plugins: [
-		polar({
-			client: polarClient,
-			createCustomerOnSignUp: true,
-			enableCustomerPortal: true,
-			use: [
-				checkout({
-					products: [
-						{
-							productId: "your-product-id",
-							slug: "pro",
-						},
-					],
-					successUrl: process.env.POLAR_SUCCESS_URL,
-					authenticatedUsersOnly: true,
-				}),
-				portal(),
-			],
-		}),
+		// polar({
+		//   client: polarClient,
+		//   createCustomerOnSignUp: true,
+		//   enableCustomerPortal: true,
+		//   use: [
+		//     checkout({
+		//       products: [
+		//         {
+		//           productId: "your-product-id",
+		//           slug: "pro",
+		//         },
+		//       ],
+		//       successUrl: process.env.POLAR_SUCCESS_URL,
+		//       authenticatedUsersOnly: true,
+		//     }),
+		//     portal(),
+		//   ],
+		// }),
 	],
 });
