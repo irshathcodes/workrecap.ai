@@ -88,4 +88,11 @@ app.get("/", (c) => {
 	return c.text("OK");
 });
 
-export default app;
+app.get("/", (c) => {
+	return c.text("OK");
+});
+
+export default {
+	fetch: app.fetch,
+	idleTimeout: 120,
+};
