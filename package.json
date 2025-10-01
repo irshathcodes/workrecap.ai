@@ -7,7 +7,7 @@
 		"packages/*"
 	],
 	"scripts": {
-		"check": "biome check --write .",
+		"check": "biome check --write --unsafe .",
 		"prepare": "husky",
 		"dev": "turbo dev",
 		"build": "turbo build",
