@@ -11,4 +11,7 @@ export default defineConfig({
 		tanstackRouter({autoCodeSplitting: true}),
 		viteReact(),
 	],
+	server: {
+		port: 3000,
+	},
 });

@@ -1,19 +1,39 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "bundler",
-		"verbatimModuleSyntax": true,
-		"strict": true,
+		// Base options
+		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"baseUrl": "./",
+		"target": "ESNext",
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+
+		// Strictness
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+
+		// If transpiling with TypeScript
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"outDir": "dist",
+		"sourceMap": true,
+
+		// Modern runtime libs
+		"lib": ["es2022"],
+
+		// Paths / Aliases
+		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"outDir": "./dist",
 		"types": ["bun"],
 		"composite": true,
-		"jsx": "react-jsx",
-		"jsxImportSource": "hono/jsx"
+		"declaration": true,
+		"declarationMap": true,
+		"incremental": true,
+		"tsBuildInfoFile": ".tsbuildinfo"
 	}
 }

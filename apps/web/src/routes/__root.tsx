@@ -48,20 +48,17 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 function RootDocument() {
 	const isFetching = useRouterState({select: (s) => s.isLoading});
 	return (
-		<html lang="en" className="dark">
-			<head>
-				<HeadContent />
-			</head>
-			<body>
-				<div className="grid h-svh grid-rows-[auto_1fr]">
-					<Header />
-					{isFetching ? <Loader /> : <Outlet />}
-				</div>
-				<Toaster richColors />
-				<TanStackRouterDevtools position="bottom-left" />
-				<ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
-				<Scripts />
-			</body>
-		</html>
+		<div>
+			<HeadContent />
+
+			<div className="grid h-svh grid-rows-[auto_1fr]">
+				<Header />
+				{isFetching ? <Loader /> : <Outlet />}
+			</div>
+			<Toaster richColors />
+			<TanStackRouterDevtools position="bottom-left" />
+			<ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
+			<Scripts />
+		</div>
 	);
 }

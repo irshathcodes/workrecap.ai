@@ -15,20 +15,24 @@ const pullRequestListSchema = z.array(pullRequestSchema);
 export class GitHubUserService {
 	private octokit: Octokit;
 	private token: string;
-	private username: string;
 
-	constructor(token: string, username: string) {
+	constructor(token: string) {
 		this.token = token;
 		this.octokit = new Octokit({
 			auth: this.token,
 		});
-		this.username = username;
 	}
-
+	// In your GitHubUserService, add this method:
+	async getAuthenticatedUser() {
+		const response = await this.octokit.rest.users.getAuthenticated();
+		return response.data.login; // GitHub username
+	}
 	// Get user's pull requests
 	async getUserPullRequestsByDays({days = 7}: {days?: number} = {}) {
+		const username = await this.getAuthenticatedUser();
+		console.log("username", username);
 		const range = getDateRange(days);
-		const q = `is:pr author:${this.username} created:${range.startDate}..${range.endDate}`;
+		const q = `is:pr author:${username} created:${range.startDate}..${range.endDate}`;
 
 		const res = await this.octokit.request("GET /search/issues", {
 			headers: {
