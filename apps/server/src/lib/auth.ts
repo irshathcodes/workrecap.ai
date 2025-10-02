@@ -14,6 +14,13 @@ export const auth = betterAuth<BetterAuthOptions>({
 	emailAndPassword: {
 		enabled: true,
 	},
+	socialProviders: {
+		github: {
+			clientId: env.GITHUB_CLIENT_ID,
+			clientSecret: env.GITHUB_CLIENT_SECRET,
+			scope: ["user:email", "repo", "read:org"],
+		},
+	},
 	advanced: {
 		defaultCookieAttributes: {
 			sameSite: "none",

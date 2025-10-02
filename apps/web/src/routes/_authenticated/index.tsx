@@ -1,7 +1,9 @@
 import {useCompletion} from "@ai-sdk/react";
+import {useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
 import {createFileRoute} from "@tanstack/react-router";
-import {Calendar, FileText, TrendingUp} from "lucide-react";
+import {Calendar, FileText, Github, TrendingUp} from "lucide-react";
 import {useState} from "react";
+import {toast} from "sonner";
 import Loader from "@/components/loader";
 import {Response} from "@/components/response";
 import {Button} from "@/components/ui/button";
@@ -12,23 +14,33 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {authClient} from "@/lib/auth-client";
+import {oRqc} from "@/lib/openapi-react-query";
 
 export const Route = createFileRoute("/_authenticated/")({
 	component: RouteComponent,
+	loader: async ({context: {queryClient, oRqc}}) => {
+		await queryClient.prefetchQuery(
+			oRqc.queryOptions("get", "/api/github-status"),
+		);
+	},
 });
 
 type SelectedDays = 7 | 14 | 30;
 
 function RouteComponent() {
-	const [selectedDays, setSelectedDays] = useState<SelectedDays | null>();
-	const {completion, complete, isLoading} = useCompletion({
-		api: `${import.meta.env.VITE_SERVER_URL}/api/recap`,
-		credentials: "include",
-	});
+	const queryClient = useQueryClient();
+	const statusQueryOptions = oRqc.queryOptions("get", "/api/github-status");
+	const {data: githubStatus} = useSuspenseQuery(statusQueryOptions);
 
-	const handleGetRecap = async (days: SelectedDays) => {
-		setSelectedDays(days);
-		complete("");
+	const handleConnectGithub = async () => {
+		await authClient.signIn
+			.social({
+				provider: "github",
+			})
+			.then(() => {});
+
+		queryClient.invalidateQueries(statusQueryOptions);
 	};
 
 	return (
@@ -41,6 +53,43 @@ function RouteComponent() {
 				</p>
 			</div>
 
+			{githubStatus?.connected ? (
+				<Recap />
+			) : (
+				<Card>
+					<CardHeader className="text-center">
+						<CardTitle className="flex items-center justify-center gap-2">
+							<Github className="h-6 w-6" />
+							GitHub Integration
+						</CardTitle>
+						<CardDescription>
+							Connect your GitHub account to generate work recaps from your pull
+							requests
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="flex items-center justify-center">
+						<Button onClick={handleConnectGithub}>Connect GitHub</Button>
+					</CardContent>
+				</Card>
+			)}
+		</div>
+	);
+}
+
+function Recap() {
+	const [selectedDays, setSelectedDays] = useState<SelectedDays | null>();
+	const {completion, complete, isLoading} = useCompletion({
+		api: `${import.meta.env.VITE_SERVER_URL}/api/recap`,
+		credentials: "include",
+	});
+
+	const handleGetRecap = async (days: SelectedDays) => {
+		setSelectedDays(days);
+		complete("");
+	};
+
+	return (
+		<div>
 			{/* Main Action Card */}
 			<Card className="mb-8">
 				<CardHeader className="text-center">
@@ -60,13 +109,14 @@ function RouteComponent() {
 							onClick={() => handleGetRecap(7)}
 							size="lg"
 							className="h-16 flex-col gap-2"
+							variant={selectedDays === 7 ? "default" : "outline"}
 						>
 							<Calendar className="h-5 w-5" />
 							<span className="font-semibold">7 Days Recap</span>
 						</Button>
 						<Button
 							onClick={() => handleGetRecap(14)}
-							variant="outline"
+							variant={selectedDays === 14 ? "default" : "outline"}
 							size="lg"
 							className="h-16 flex-col gap-2"
 						>
@@ -75,7 +125,7 @@ function RouteComponent() {
 						</Button>
 						<Button
 							onClick={() => handleGetRecap(30)}
-							variant="outline"
+							variant={selectedDays === 30 ? "default" : "outline"}
 							size="lg"
 							className="h-16 flex-col gap-2"
 						>

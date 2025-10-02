@@ -25,7 +25,7 @@ export default function createApp() {
 	appRouter.notFound((c) => {
 		return c.json(
 			{
-				message: `${c.req.path} not found`,
+				message: `${c.req.path} route not found`,
 			},
 			HTTP_STATUS_CODES.NOT_FOUND,
 		);

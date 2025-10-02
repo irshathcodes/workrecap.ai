@@ -11,7 +11,9 @@ export interface paths {
 			path?: never;
 			cookie?: never;
 		};
-		get: {
+		get?: never;
+		put?: never;
+		post: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -72,8 +74,6 @@ export interface paths {
 				};
 			};
 		};
-		put?: never;
-		post?: never;
 		delete?: never;
 		options?: never;
 		head?: never;
@@ -156,6 +156,85 @@ export interface paths {
 				};
 			};
 		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/api/github-status": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": {
+							connected: boolean;
+							username?: string;
+						};
+					};
+				};
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": {
+							message: string;
+							statusCode: number;
+						};
+					};
+				};
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": {
+							/** @example false */
+							success: boolean;
+							error: {
+								issues: {
+									code: string;
+									path: (string | number)[];
+									message?: string;
+								}[];
+								name: string;
+							};
+							statusCode: number;
+						};
+					};
+				};
+				500: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": {
+							message: string;
+							statusCode: number;
+						};
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
 		delete?: never;
 		options?: never;
 		head?: never;

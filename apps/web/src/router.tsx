@@ -3,15 +3,17 @@ import Loader from "./components/loader";
 import "./index.css";
 import {QueryClientProvider} from "@tanstack/react-query";
 import {createQueryClient} from "@/lib/query-client";
+import {oRqc} from "./lib/openapi-react-query";
 import {routeTree} from "./routeTree.gen";
 
 export const createRouter = () => {
 	const queryClient = createQueryClient();
+
 	const router = createTanStackRouter({
 		routeTree,
 		scrollRestoration: true,
 		defaultPreloadStaleTime: 0,
-		context: {queryClient},
+		context: {queryClient, oRqc},
 		defaultPendingComponent: () => <Loader />,
 		defaultNotFoundComponent: () => <div>Not Found</div>,
 		Wrap: ({children}) => (

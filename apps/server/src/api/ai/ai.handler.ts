@@ -59,6 +59,48 @@ const handlers: InferHandlers<typeof routes> = {
 			"json"
 		>;
 	},
+	getGithubStatus: async (c) => {
+		const user = c.var.authCtx.user;
+
+		const githubAccount = await db.query.accounts.findFirst({
+			where: and(
+				eq(accounts.userId, user.id),
+				eq(accounts.providerId, "github"),
+			),
+			columns: {
+				accessToken: true,
+			},
+		});
+
+		if (!githubAccount || !githubAccount.accessToken) {
+			return c.json(
+				{
+					connected: false,
+				},
+				HTTP_STATUS_CODES.OK,
+			);
+		}
+
+		try {
+			const githubService = new GitHubUserService(githubAccount.accessToken);
+			const username = await githubService.getAuthenticatedUser();
+
+			return c.json(
+				{
+					connected: true,
+					username,
+				},
+				HTTP_STATUS_CODES.OK,
+			);
+		} catch (error) {
+			return c.json(
+				{
+					connected: false,
+				},
+				HTTP_STATUS_CODES.OK,
+			);
+		}
+	},
 };
 
 export default handlers;

@@ -5,7 +5,7 @@ import {jsonContent, jsonContentRequired} from "@/lib/schema-helpers.js";
 
 const routes = {
 	getRecap: createRoute({
-		method: "get",
+		method: "post",
 		path: "/recap",
 		responses: ResponseBuilder.withAuthAndValidation({
 			[HTTP_STATUS_CODES.OK]: jsonContent(z.any()),
@@ -23,6 +23,18 @@ const routes = {
 		},
 		responses: ResponseBuilder.withAuthAndValidation({
 			[HTTP_STATUS_CODES.OK]: jsonContent(z.any()),
+		}),
+	}),
+	getGithubStatus: createRoute({
+		method: "get",
+		path: "/github-status",
+		responses: ResponseBuilder.withAuthAndValidation({
+			[HTTP_STATUS_CODES.OK]: jsonContent(
+				z.object({
+					connected: z.boolean(),
+					username: z.string().optional(),
+				}),
+			),
 		}),
 	}),
 };
