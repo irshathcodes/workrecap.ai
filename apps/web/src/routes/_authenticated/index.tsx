@@ -22,7 +22,8 @@ type SelectedDays = 7 | 14 | 30;
 function RouteComponent() {
 	const [selectedDays, setSelectedDays] = useState<SelectedDays | null>();
 	const {completion, complete, isLoading} = useCompletion({
-		api: `${import.meta.env.VITE_SERVER_URL}/api/get-recap`,
+		api: `${import.meta.env.VITE_SERVER_URL}/api/recap`,
+		credentials: "include",
 	});
 
 	const handleGetRecap = async (days: SelectedDays) => {
