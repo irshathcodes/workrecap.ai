@@ -10,6 +10,7 @@ const pullRequestSchema = z.object({
 	state: z.enum(["open", "closed", "merged", "draft"]),
 	body: z.string().nullable(),
 });
+
 const pullRequestListSchema = z.array(pullRequestSchema);
 
 export class GitHubUserService {
@@ -22,16 +23,16 @@ export class GitHubUserService {
 			auth: this.token,
 		});
 	}
-	// In your GitHubUserService, add this method:
+
 	async getAuthenticatedUser() {
 		const response = await this.octokit.rest.users.getAuthenticated();
 		return response.data.login; // GitHub username
 	}
-	// Get user's pull requests
+
 	async getUserPullRequestsByDays({days = 7}: {days?: number} = {}) {
 		const username = await this.getAuthenticatedUser();
-		console.log("username", username);
 		const range = getDateRange(days);
+
 		const q = `is:pr author:${username} created:${range.startDate}..${range.endDate}`;
 
 		const res = await this.octokit.request("GET /search/issues", {
@@ -56,7 +57,7 @@ function getDateRange(days: number): {
 
 	const startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000);
 	return {
-		startDate: startDate.toISOString().split("T")[0],
-		endDate: endDate.toISOString().split("T")[0],
+		startDate: startDate.toISOString().split("T")[0]!,
+		endDate: endDate.toISOString().split("T")[0]!,
 	};
 }

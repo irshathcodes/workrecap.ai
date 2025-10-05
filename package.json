@@ -7,21 +7,19 @@
 		"packages/*"
 	],
 	"scripts": {
-		"check": "biome check --write --unsafe .",
+		"clean-install": "rm -rf node_modules && cd apps/server && rm -rf node_modules && cd ../web && rm -rf node_modules && bun install",
+		"check": "biome check --write .",
 		"prepare": "husky",
-		"dev": "turbo dev",
-		"build": "turbo build",
-		"check-types": "turbo check-types",
-		"dev:web": "turbo -F web dev",
-		"dev:server": "turbo -F server dev",
-		"db:push": "turbo -F server db:push",
-		"db:studio": "turbo -F server db:studio",
-		"db:generate": "turbo -F server db:generate",
-		"db:migrate": "turbo -F server db:migrate"
+		"dev": "bun --filter '*' dev",
+		"dev:web": "bun run dev --filter=web",
+		"dev:server": "bun run dev --filter=server",
+		"db:push": "bun run db:push --filter=server",
+		"db:studio": "bun run db:studio --filter=server",
+		"db:generate": "bun run db:generate --filter=server",
+		"db:migrate": "bun run db:migrate --filter=server"
 	},
 	"dependencies": {},
 	"devDependencies": {
-		"turbo": "^2.5.4",
 		"@biomejs/biome": "^2.2.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.1.2"
